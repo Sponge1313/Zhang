@@ -1,0 +1,45 @@
+版权声明：本文为博主原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。
+本文链接：https://blog.csdn.net/xinfeng2005/article/details/79024167
+states = ('Healthy', 'Fever')
+
+observations = ('normal', 'cold', 'dizzy')
+
+start_probability = {'Healthy': 0.6, 'Fever': 0.4}
+
+transition_probability = {
+    'Healthy': {'Healthy': 0.7, 'Fever': 0.3},
+    'Fever': {'Healthy': 0.4, 'Fever': 0.6}
+}
+
+emission_probability = {
+    'Healthy': {'normal': 0.5, 'cold': 0.4, 'dizzy': 0.1},
+    'Fever': {'normal': 0.1, 'cold': 0.3, 'dizzy': 0.6}
+}
+
+def my_viterbi(obs, states, start_p, trans_p, emit_p):
+    V=[{}]
+    path={}
+    # 先计算初始
+    for y in states:
+        V[0][y]=start_p[y]*emit_p[y][obs[0]]
+        path[y]=[y]
+    # 计算后面时刻
+    for t in range(1, len(obs)):
+        V.append({})
+        newpath={}
+        for y0 in states:
+            print(V[t - 1][y0] * trans_p[y0][y] * emit_p[y0][obs[t]], y0)
+        for y in states:
+            (prob, state) =   max((V[t - 1][y0] * trans_p[y0][y] * emit_p[y][obs[t]], y0) for y0 in states)
+            # print(prob,state)
+            V[t][y]=prob
+            newpath[y]=path[state]+[y]
+        path=newpath
+    print(path)
+    (prob, state) = max((V[t][y], y) for y in states)
+    print(prob,state)
+    print(path[state])
+
+————————————————
+版权声明：本文为CSDN博主「xinfeng2005」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/xinfeng2005/article/details/79024167
