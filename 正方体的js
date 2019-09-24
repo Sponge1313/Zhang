@@ -1,0 +1,76 @@
+'use strict';
+
+/* global THREE */
+
+function main() {
+  const canvas = document.querySelector('#c');
+  const renderer = new THREE.WebGLRenderer({canvas});
+
+  const fov = 75;
+  const aspect = 2;  // the canvas default
+  const near = 0.1;
+  const far = 5;
+  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  camera.position.z = 2;
+  //移动相机
+  const scene = new THREE.Scene();
+
+  //添加一盏灯
+  {
+    const color = 0xFFFFFF;
+    const intensity = 1;
+    const light = new THREE.DirectionalLight(color, intensity);
+    light.position.set(-1, 2, 4);
+    scene.add(light);
+  }
+
+  const boxWidth = 1;
+  const boxHeight = 1;
+  const boxDepth = 1;
+  //顶点
+  const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+
+  function makeInstance(geometry, color, x) {
+    const material = new THREE.MeshPhongMaterial({color});
+	//Mesh代表了Geometry(物体的形状)和Material (怎么 绘制物体, 光滑还是平整, 
+	//什么颜色, 什么贴图等等)的组合， 以及物体在场景中的位置、朝向、和缩放。
+	//MeshBasicMaterial材质不会受到灯光的影响，MeshPhongMaterial材质会受灯光影响
+
+   //创建一个根据指定的颜色生成新材质的函数。 然后函数会根据指定的几何体
+   //生成一个mesh， 最后将他添加进场景并设置X轴的位置
+	const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+
+    cube.position.x = x;
+
+    return cube;
+  }
+  
+  //将使用三种不同的颜色和X轴位置调用三次函数， 将生成的网格实例存在一个数组中
+  const cubes = [
+    makeInstance(geometry, 0x44aa88,  0),
+    makeInstance(geometry, 0x8844aa, -2),
+    makeInstance(geometry, 0xaa8844,  2),
+  ];
+
+  //渲染循环函数
+  //并给每个立方体设置了稍微不同的旋转角度
+  function render(time) {
+    time *= 0.001;  // convert time to seconds
+
+    cubes.forEach((cube, ndx) => {
+      const speed = 1 + ndx * .1;
+      const rot = time * speed;
+      cube.rotation.x = rot;
+      cube.rotation.y = rot;
+    });
+
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+
+}
+
+main();
