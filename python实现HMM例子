@@ -245,7 +245,3 @@ if __name__ == '__main__':
     # plt.scatter(x, obs, marker='*', color='r')
     # plt.plot(x, data, color='g')
     # plt.show()
-
-————————————————
-版权声明：本文为CSDN博主「slx_share」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/slx_share/article/details/80237566
