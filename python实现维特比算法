@@ -39,7 +39,3 @@ def my_viterbi(obs, states, start_p, trans_p, emit_p):
     (prob, state) = max((V[t][y], y) for y in states)
     print(prob,state)
     print(path[state])
-
-————————————————
-版权声明：本文为CSDN博主「xinfeng2005」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/xinfeng2005/article/details/79024167
